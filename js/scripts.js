@@ -11,7 +11,7 @@ Player.prototype.updateScore = function(number) {
   this.totalScore += number;
 }
 
-
+// check boolean value of turn to see who the current player is
 Player.prototype.currentPlayer = function () {
   return this.turn;
 }
@@ -57,7 +57,7 @@ Player.prototype.playerNotTurn = function () {
 Player.prototype.playerIsTurn = function () {
   this.turn = true;
 }
-
+// 
 function handleRollButton(playerOne, playerTwo) {
   
   console.log(playerOne, playerTwo);
