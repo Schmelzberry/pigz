@@ -32,8 +32,19 @@ if (hit me)
       curren total = 0
 
 
+if its your turn, roll the dice
 
-each player has thei
+is it 1? 
+  end current turn
+  set player.turn = false
+is it greater than 1? 
+  add to currentRunTotal
+
+want to hold?
+  add currentRunTotal to totalScore
+  end current turn
+  set player.turn = false
+
 
 ## Tests
 
@@ -42,15 +53,15 @@ each player has thei
 ```javascript
 Test 1: "It will create an instance of an object with 3 key properties."
 Code: let player1 = new Player(name, score, turn)
-Expected Output: Player {name: undefined , score: undefined, turn: undefined}
+Expected Output: Player {name: undefined , totalScore: undefined, turn: undefined}
 
 Test 2: "It will create an instance of an object with 3 key-value pair properties."
 Code: let player1 = new Player("Name", 0, true)
-Expected Output: Player {name: "Name" , score: 0, turn: true}
+Expected Output: Player {name: "Name" , totalScore: 0, turn: true}
 
 Test 3: "It will create an instance of an object with 3 key-value pair properties, with parameters for player name and turn."
 Code: let player1 = new Player("Name", true)
-Expected Output: Player {name: "Name" , score: 0, turn: true}
+Expected Output: Player {name: "Name" , totalScore: 0, turn: true}
 ```
 
 ##### **Describe:** Player.prototype.updateScore()
@@ -83,4 +94,31 @@ Test 1:"it will create a number passed in as an argument"
 Code:  diceRoll(1);
 Expected Output: 1;
 
+Test 2: "it will create a random number"
+Code:  diceRoll();
+Expected Output: 0.007444121;
+
+Test 3: "it will create a random number up to 6"
+Code: diceRoll()
+Expected Output: 3 ...
+
+Test 4: "It will create a random number between 1 and 6."
+Code: diceRoll()
+Expected Output: 1 ...
+
+```
+
+##### **Describe:** currentPlayer()
+
+
+```javascript
+Test 1: "it should return this.turn value from player object"
+Code: let player1 = new Player("Name", true);
+currentTurn(player1);
+Expected Output: true
+
+Test 2: "determine if its the player's turn"
+Code: let player1 = new Player("Name", true);
+currentTurn(player1);
+Expected Output: true 
 
