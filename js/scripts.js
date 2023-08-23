@@ -1,5 +1,5 @@
-function Player(name, score, turn) {
+function Player(name, turn) {
   this.name = name;
-  this.score = score;
+  this.score = 0;
   this.turn = turn;
 }

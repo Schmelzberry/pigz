@@ -16,11 +16,71 @@ The first player to score 100 or more points wins.
 
 -It will need to create a random number between 1-6, if it's between 2 and 6 it will be added to a running total. If it's a 1, the running total is set to 0 and the turn ends OR the player plays it safe.
 
-**Describe:** Player()
+
+Player:
+Total Score
+Current Total
+
+Hit me (current total)
+Hold? (current total + total score)
+
+if (hit me)
+  if (player.turn === true)
+    if (diceRoll !== 1)
+      diceRoll + current total
+    else
+      curren total = 0
 
 
-Test 1: It will create an instance of an object with 3 key properties.
+
+each player has thei
+
+## Tests
+
+##### **Describe:** Player()
+
+```javascript
+Test 1: "It will create an instance of an object with 3 key properties."
 Code: let player1 = new Player(name, score, turn)
 Expected Output: Player {name: undefined , score: undefined, turn: undefined}
 
-Test 2: 
+Test 2: "It will create an instance of an object with 3 key-value pair properties."
+Code: let player1 = new Player("Name", 0, true)
+Expected Output: Player {name: "Name" , score: 0, turn: true}
+
+Test 3: "It will create an instance of an object with 3 key-value pair properties, with parameters for player name and turn."
+Code: let player1 = new Player("Name", true)
+Expected Output: Player {name: "Name" , score: 0, turn: true}
+```
+
+##### **Describe:** Player.prototype.updateScore()
+
+```javascript
+Test 1: "It returns the current Player score value."
+Code:
+  let player1 = new Player("Name", true);
+  player1.updateScore();
+Expected Output:  0
+
+Test 2: "It adds to the current player score value."
+Code:
+  let player1 = new Player("Name", true);
+  player1.updateScore(5);
+Expected Output:  5
+
+Test 3: "It subtracts from the current player score value."
+Code:
+  let player1 = new Player("Name", true);
+  player1.updateScore(5);
+Expected Output:  -5
+
+```
+##### **Describe:** diceRoll()
+
+
+```javascript
+Test 1:"it will create a number passed in as an argument"
+Code:  diceRoll(1);
+Expected Output: 1;
+
+
