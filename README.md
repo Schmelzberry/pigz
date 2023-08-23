@@ -14,6 +14,8 @@ The first player to score 100 or more points wins.
 
 -it will be a large sum function, using a for or forEach loop to view each number, and then will add 2-6 to the players total or switch to other player's turn after resetting player's total if a 1 is rolled.
 
+-It will need to create a random number between 1-6, if it's between 2 and 6 it will be added to a running total. If it's a 1, the running total is set to 0 and the turn ends OR the player plays it safe.
+
 Describe: Player()
 Test 1: It will create an instance of an object with 3 key properties.
 Code: let player1 = new Player(name, score, turn)
