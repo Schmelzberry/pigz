@@ -16,7 +16,11 @@ The first player to score 100 or more points wins.
 
 -It will need to create a random number between 1-6, if it's between 2 and 6 it will be added to a running total. If it's a 1, the running total is set to 0 and the turn ends OR the player plays it safe.
 
-Describe: Player()
+**Describe:** Player()
+
+
 Test 1: It will create an instance of an object with 3 key properties.
 Code: let player1 = new Player(name, score, turn)
-Expected Output: player1 {name:"" , score:"", turn:""}
+Expected Output: Player {name: undefined , score: undefined, turn: undefined}
+
+Test 2: 
