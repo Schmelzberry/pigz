@@ -92,7 +92,7 @@ function handleEverything() {
       playerOne.playerIsTurn();
     }
 
-    console.log(playerOne, playerTwo);
+    displayResults(playerOne, playerTwo);
 
   });
 
@@ -109,10 +109,9 @@ function handleEverything() {
 
     displayResults(playerOne, playerTwo);
 
-    
   });
-
 }
+
 // UI Logic // 
 window.addEventListener("load", handleEverything);
 
@@ -120,14 +119,20 @@ function displayResults(playerOneObject, playerTwoObject) {
 
   const p1Current = document.getElementById("p1-current-run-total");
   const p2Current = document.getElementById("p2-current-run-total");
+
   const p1Total = document.getElementById("p1-total-score");
   const p2Total = document.getElementById("p2-total-score");
 
-  p1Total.innerText=null;
+  p1Total.innerText = null;
   p1Current.innerText = null;
+  p2Total.innerText = null;
+  p2Current.innerText = null;
 
   p1Total.append(playerOneObject.totalScore);
   p1Current.append(playerOneObject.currentRunTotal);
+
+  p2Total.append(playerTwoObject.totalScore);
+  p2Current.append(playerTwoObject.currentRunTotal);
 
 
 }
