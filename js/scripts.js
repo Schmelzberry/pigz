@@ -13,7 +13,7 @@ function Player(name, turn) {
 // if the player's score hits 100 or above, set win flag to true
 Player.prototype.updateScore = function(number) {
   this.totalScore += number;
-  if  (this.totalScore >= 100) { 
+  if  (this.totalScore >= 20) { 
       this.win = true;
   }
 }
@@ -57,8 +57,8 @@ Player.prototype.holdTurn = function() {
   // UI LOGIC for WINNER CONDITION
   if (this.isWinner() === true) {
     document.querySelector("button#new").removeAttribute("class");
-    let winner = this.name;
-    return window.alert(winner + " wins!")
+    document.querySelector("div#winner").removeAttribute("class");
+ 
     
 
   }
@@ -191,6 +191,7 @@ function displayResults(playerOneObject, playerTwoObject) {
 
   const p1Current = document.getElementById("p1-current-run-total");
   const p2Current = document.getElementById("p2-current-run-total");
+  const whoWins = document.getElementById("dat-winner")
 
   const p1Total = document.getElementById("p1-total-score");
   const p2Total = document.getElementById("p2-total-score");
@@ -199,12 +200,15 @@ function displayResults(playerOneObject, playerTwoObject) {
   p1Current.innerText = null;
   p2Total.innerText = null;
   p2Current.innerText = null;
+  whoWins.innerText = null;
 
   p1Total.append(playerOneObject.totalScore);
   p1Current.append(playerOneObject.currentRunTotal);
 
   p2Total.append(playerTwoObject.totalScore);
   p2Current.append(playerTwoObject.currentRunTotal);
+
+  whoWins.append(playerOneObject.name || playerTwoObject.name );
 
 }
 
