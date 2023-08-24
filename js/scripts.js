@@ -1,4 +1,6 @@
-// Business Logic //
+// BUSINESS LOGIC //
+
+// BUSINESS LOGIC for Player
 function Player(name, turn) {
   this.name = name;
   this.totalScore = 0;
@@ -16,28 +18,18 @@ Player.prototype.currentPlayer = function () {
   return this.turn;
 }
 
-// create a random number between 1-6
-function diceRoll() {
-  min = Math.ceil(1);
-  max = Math.floor(6);
-  let random = Math.floor(Math.random() * (max - min + 1) + min)
-  console.log(random);
-  return random;
- 
-}
-
-// should this be a prototype that references the turn boolean, and executes the dice roll according the value?
+// references the turn boolean, and executes the dice roll according the value
 Player.prototype.rollTheDice = function () {
   if (!this.turn) {
     return false
   }
-    let diceRolled = diceRoll();
+  let diceRolled = diceRoll();
 
-    if (diceRolled !== 1 ) {
-      this.currentRunTotal += diceRolled;
-    } else {
-      this.currentRunTotal = 0;
-    }
+  if (diceRolled !== 1 ) {
+    his.currentRunTotal += diceRolled;
+  } else {
+    this.currentRunTotal = 0;
+  }
   
 } 
 
@@ -50,71 +42,116 @@ Player.prototype.holdTurn = function() {
   this.currentRunTotal = 0;
 }
 
-Player.prototype.playerNotTurn = function () {
-  this.turn = false;
-}
-
-Player.prototype.playerIsTurn = function () {
-  this.turn = true;
-}
-// 
-function handleRollButton(playerOne, playerTwo) {
-  
-  console.log(playerOne, playerTwo);
-
-  if (playerOne.turn) {
-    playerOne.diceRoll();
-    console.log("It works?");
-  } else {
-    console.log("Something is wrong.");
+// switchTurn updates Player object's current turn value to true if false, or to false if true
+Player.prototype.switchTurn = function () {
+  switch (this.turn) {
+    case (true):
+      this.turn = false;
+      break;
+    case (false):
+      this.turn = true;
+      break;
   }
-
 }
 
-//
+// resets Player object's score values to 0
+Player.prototype.resetPlayer = function () {
+  this.totalScore = 0;
+  this.currentRunTotal = 0;
+}
+
+// BUSINESS LOGIC for game mechanics
+
+// -------------
+// REFACTOR: Construct Game object to hold Player objects, and create prototype methods
+// to replace each function that runs our game mechanics
+// -------------
+
+// create a random number between 1-6
+function diceRoll() {
+  min = Math.ceil(1);
+  max = Math.floor(6);
+  let random = Math.floor(Math.random() * (max - min + 1) + min)
+  console.log(random);
+  return random;
+}
+
+// taking both player objects as parameters, reset each player score values to 0
+function resetPlayers(playerOne, playerTwo) {
+  playerOne.resetPlayer();
+  playerTwo.resetPlayer();
+}
+
+// taking both player objects as parameters, switch the turn value for each player 
+function switchCurrentPlayer (playerOne, playerTwo) {
+  playerOne.switchTurn();
+  playerTwo.switchTurn();
+}
+
+// taking both player objects as parameters, checks to see whose turn it currently is, 
+// then rolls the dice for that player
+function rollDatDice (playerOne, playerTwo) {
+  if (playerOne.currentPlayer()) {  
+      playerOne.rollTheDice();
+    } else if (playerTwo.currentPlayer()) {
+      playerTwo.rollTheDice();
+    }
+}
+
+// taking both player objects as parameters, checks to see whose turn it currently is,
+// then updates their score before switching player turns
+function holdDatTurn (playerOne, playerTwo) {
+  if (playerOne.currentPlayer()) {
+    playerOne.holdTurn();
+    switchCurrentPlayer(playerOne, playerTwo);
+  } else if (playerTwo.currentPlayer()) {
+    playerTwo.holdTurn();
+    switchCurrentPlayer(playerOne, playerTwo);
+  }
+}
+
+// ************
+// * UI LOGIC *
+// ************
 function handleEverything() {
 
   const playerOne = new Player("One", true);
   const playerTwo = new Player("Two", false);
 
-  const rollButton = document.querySelector("button#rollp1");
-  const holdButton = document.querySelector("button#holdp1");
+  const rollButton = document.querySelector("button#roll");
+  const holdButton = document.querySelector("button#hold");
+  const newButton = document.querySelector("button#new");
 
   // hold button handler -- possible refactor to loop???
   holdButton.addEventListener("click", function() {
-    if (playerOne.turn) {
-      playerOne.holdTurn();
-      playerOne.playerNotTurn();
-      playerTwo.playerIsTurn();
-    } else if (playerTwo.turn) {
-      playerTwo.holdTurn();
-      playerTwo.playerNotTurn();
-      playerOne.playerIsTurn();
-    }
-
+    
+    holdDatTurn(playerOne, playerTwo);
     displayResults(playerOne, playerTwo);
 
   });
 
   // roll button handler
-  rollButton.addEventListener("click", function() {
-
-    if (playerOne.turn) {
-      playerOne.rollTheDice();
-    } else if (playerTwo.turn) {
-      playerTwo.rollTheDice();
-    }
-
-    console.log(playerOne, playerTwo);
-
+  rollButton.addEventListener("click", function () {
+    
+    rollDatDice(playerOne, playerTwo);
     displayResults(playerOne, playerTwo);
 
   });
+
+  // new button event handler
+  newButton.addEventListener("click", function() {
+
+    resetPlayers(playerOne, playerTwo);
+    newButton.setAttribute("class", "hidden");
+
+  })
+
 }
 
-// UI Logic // 
+// event listener for window, calls handleEverything function
 window.addEventListener("load", handleEverything);
 
+// function for displaying results
 function displayResults(playerOneObject, playerTwoObject) {
 
   const p1Current = document.getElementById("p1-current-run-total");
@@ -133,6 +170,5 @@ function displayResults(playerOneObject, playerTwoObject) {
 
   p2Total.append(playerTwoObject.totalScore);
   p2Current.append(playerTwoObject.currentRunTotal);
-
 
 }

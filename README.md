@@ -16,6 +16,19 @@ The first player to score 100 or more points wins.
 
 -It will need to create a random number between 1-6, if it's between 2 and 6 it will be added to a running total. If it's a 1, the running total is set to 0 and the turn ends OR the player plays it safe.
 
+***DAY 2****
+-Add a win condition, reveal new game button, when total score >= 100
+  
+  when player.totalScore >= 100
+    show newGameButton
+  
+  newGameButton.addEventListener("click", function() {
+    resetPlayers(playerOne, playerTwo);
+
+    then, hide the button again
+  });
+
+-switches turn and clears currentRunTotal when a "1" is rolled.
 
 Player:
 Total Score
