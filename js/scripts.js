@@ -1,14 +1,26 @@
-// Business Logic //
+// BUSINESS LOGIC //
+
+// BUSINESS LOGIC for Player
 function Player(name, turn) {
   this.name = name;
   this.totalScore = 0;
   this.currentRunTotal = 0;
   this.turn = turn;
+  this.win = false;
 }
 
 // update scores by pushing number param into the this.totalScore
+// if the player's score hits 100 or above, set win flag to true
 Player.prototype.updateScore = function(number) {
   this.totalScore += number;
+  if  (this.totalScore >= 100) { 
+      this.win = true;
+  }
+}
+
+// returns Player object's win value, initially set to false
+Player.prototype.isWinner = function () {
+  return this.win
 }
 
 // check boolean value of turn to see who the current player is
@@ -16,29 +28,20 @@ Player.prototype.currentPlayer = function () {
   return this.turn;
 }
 
-// create a random number between 1-6
-function diceRoll() {
-  min = Math.ceil(1);
-  max = Math.floor(6);
-  let random = Math.floor(Math.random() * (max - min + 1) + min)
-  console.log(random);
-  return random;
- 
-}
-
-// should this be a prototype that references the turn boolean, and executes the dice roll according the value?
+// references the turn boolean, and executes the dice roll according the value
 Player.prototype.rollTheDice = function () {
   if (!this.turn) {
     return false
   }
-    let diceRolled = diceRoll();
 
-    if (diceRolled !== 1 ) {
-      this.currentRunTotal += diceRolled;
-    } else {
-      this.currentRunTotal = 0;
-    }
-  
+  let diceRolled = diceRoll();
+
+  if (diceRolled !== 1 ) {
+    this.currentRunTotal += diceRolled;
+  } else {
+    this.currentRunTotal = 0;
+  }
+  return diceRolled;
 } 
 
 // holdTurn updates player total score with player's current run total
@@ -46,75 +49,144 @@ Player.prototype.holdTurn = function() {
   if (!this.turn) {
     return false;
   }
-  this.totalScore += this.currentRunTotal;
+  this.updateScore(this.currentRunTotal);
+  this.currentRunTotal = 0;
+
+  // ******* REFACTOR *******
+  // for DEBUGGING purposes
+  // UI LOGIC for WINNER CONDITION
+  if (this.isWinner() === true) {
+    document.querySelector("button#new").removeAttribute("class");
+    let winner = this.name;
+    return window.alert(winner + " wins!")
+    
+
+  }
+}
+
+// switchTurn updates Player object's current turn value to true if false, or to false if true
+Player.prototype.switchTurn = function () {
+  switch (this.turn) {
+    case (true):
+      this.turn = false;
+      break;
+    case (false):
+      this.turn = true;
+      break;
+  }
+}
+
+// resets Player object's score values to 0
+Player.prototype.resetPlayer = function () {
+  this.totalScore = 0;
   this.currentRunTotal = 0;
 }
 
-Player.prototype.playerNotTurn = function () {
-  this.turn = false;
+// BUSINESS LOGIC for game mechanics
+
+// -------------
+// REFACTOR: Construct Game object to hold Player objects, and create prototype methods
+// to replace each function that runs our game mechanics
+// -------------
+
+// create and return a random number between 1-6
+function diceRoll() {
+  min = Math.ceil(1);
+  max = Math.floor(6);
+  let random = Math.floor(Math.random() * (max - min + 1) + min)
+  return random;
 }
 
-Player.prototype.playerIsTurn = function () {
-  this.turn = true;
+// taking both player objects as parameters, reset each player's score values to 0
+function resetPlayers(playerOne, playerTwo) {
+  playerOne.resetPlayer();
+  playerTwo.resetPlayer();
 }
-// 
-function handleRollButton(playerOne, playerTwo) {
-  
-  console.log(playerOne, playerTwo);
 
-  if (playerOne.turn) {
-    playerOne.diceRoll();
-    console.log("It works?");
-  } else {
-    console.log("Something is wrong.");
+// taking both player objects as parameters, switch the turn value for each player 
+function switchCurrentPlayer (playerOne, playerTwo) {
+  playerOne.switchTurn();
+  playerTwo.switchTurn();
+}
+
+// taking both player objects as parameters, checks to see whose turn it currently is, 
+// then rolls the dice for that player
+function rollDatDice (playerOne, playerTwo) {
+  let diceRoll = 0;
+  // REFACTOR redundant code
+  if (playerOne.currentPlayer()) {  
+    diceRoll = playerOne.rollTheDice();
+    if (diceRoll === 1) {
+      switchCurrentPlayer(playerOne, playerTwo);
+    }
+  } else if (playerTwo.currentPlayer()) {
+    diceRoll = playerTwo.rollTheDice();
+    if (diceRoll === 1) {
+      switchCurrentPlayer(playerOne, playerTwo);
+    }
   }
 
+  return diceRoll;
 }
 
-//
+// taking both player objects as parameters, checks to see whose turn it currently is,
+// then updates their score before switching player turns
+function holdDatTurn (playerOne, playerTwo) {
+  if (playerOne.currentPlayer()) {
+    playerOne.holdTurn();
+    switchCurrentPlayer(playerOne, playerTwo);
+  } else if (playerTwo.currentPlayer()) {
+    playerTwo.holdTurn();
+    switchCurrentPlayer(playerOne, playerTwo);
+  }
+}
+
+// ************
+// * UI LOGIC *
+// ************
+
+// -------------
+// REFACTOR: create a single eventListener for all three buttons,
+// incorporate branching dependent on which button is clicked
+// -------------
 function handleEverything() {
 
-  const playerOne = new Player("One", true);
-  const playerTwo = new Player("Two", false);
+  const playerOne = new Player("Player One", true);
+  const playerTwo = new Player("Player Two", false);
 
-  const rollButton = document.querySelector("button#rollp1");
-  const holdButton = document.querySelector("button#holdp1");
+  const rollButton = document.querySelector("button#roll");
+  const holdButton = document.querySelector("button#hold");
+  const newButton = document.querySelector("button#new");
 
-  // hold button handler -- possible refactor to loop???
+  // hold button handler
   holdButton.addEventListener("click", function() {
-    if (playerOne.turn) {
-      playerOne.holdTurn();
-      playerOne.playerNotTurn();
-      playerTwo.playerIsTurn();
-    } else if (playerTwo.turn) {
-      playerTwo.holdTurn();
-      playerTwo.playerNotTurn();
-      playerOne.playerIsTurn();
-    }
-
+    
+    holdDatTurn(playerOne, playerTwo);
     displayResults(playerOne, playerTwo);
 
   });
 
   // roll button handler
-  rollButton.addEventListener("click", function() {
-
-    if (playerOne.turn) {
-      playerOne.rollTheDice();
-    } else if (playerTwo.turn) {
-      playerTwo.rollTheDice();
-    }
-
-    console.log(playerOne, playerTwo);
-
+  rollButton.addEventListener("click", function () {
+    
+    const diceRoll = rollDatDice(playerOne, playerTwo);
+    // displayDiceRoll(diceRoll);
     displayResults(playerOne, playerTwo);
 
   });
+
+  // new button event handler
+  newButton.addEventListener("click", function() {
+
+    resetPlayers(playerOne, playerTwo);
+    displayResults(playerOne, playerTwo);
+    newButton.setAttribute("class", "hidden");
+
+  })
+
 }
 
-// UI Logic // 
-window.addEventListener("load", handleEverything);
-
+// function for displaying results
 function displayResults(playerOneObject, playerTwoObject) {
 
   const p1Current = document.getElementById("p1-current-run-total");
@@ -134,5 +206,7 @@ function displayResults(playerOneObject, playerTwoObject) {
   p2Total.append(playerTwoObject.totalScore);
   p2Current.append(playerTwoObject.currentRunTotal);
 
-
 }
+
+// event listener for window, calls handleEverything function
+window.addEventListener("load", handleEverything);
