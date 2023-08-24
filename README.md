@@ -85,12 +85,12 @@ The first player to reach a total game score of 100 or more points wins, at whic
 
 ## Setup/Installation Requirements
 
-1. Copy the **[URL](https://github.com/jfpalchak/pig-dice.git)** provided for this repository.
+1. Copy the **[URL](https://github.com/Schmelzberry/pigz.git)** provided for this repository.
 2. Open Terminal.
 3. Change your working directory to where you want the cloned directory.
 4. In your terminal, type `git clone` and use the copied URL from Step 1. Or, copy the following git command:
 ```bash
-git clone https://github.com/jfpalchak/pig-dice.git
+git clone https://github.com/Schmelzberry/pigz.git
 ```
 5. Navigate to the top level of the newly cloned directory.
 6. Open index.html in your browser to view and navigate the webpage.
