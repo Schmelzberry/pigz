@@ -81,7 +81,7 @@ Each turn, beginning with Player One, a player repeatedly rolls a die until eith
   * If the player rolls any number other than a 1, that number is added to their current running total and the player can continue to roll the die.
   * If a player chooses to "hold" instead of continue rolling, their current running total is added to their total game score, and it becomes the next player's turn.
 
-The first player to score 100 or more points wins, at which point a "New Game" button appears which allows the users to reset their scores and begin a fresh game.
+The first player to reach a total game score of 100 or more points wins, at which point a "New Game" button appears which allows the users to reset their scores and begin a fresh game.
 
 ## Setup/Installation Requirements
 
@@ -101,16 +101,29 @@ git clone https://github.com/jfpalchak/pig-dice.git
 
 ```javascript
 Test 1: "It will create an instance of an object with 3 key properties."
-Code: let player1 = new Player(name, score, turn)
-Expected Output: Player {name: undefined , totalScore: undefined, turn: undefined}
+Code: 
+  let player1 = new Player(name, score, turn)
+Expected Output: 
+  Player {name: undefined , totalScore: undefined, turn: undefined}
 
 Test 2: "It will create an instance of an object with 3 key-value pair properties."
-Code: let player1 = new Player("Name", 0, true)
-Expected Output: Player {name: "Name" , totalScore: 0, turn: true}
+Code: 
+  let player1 = new Player("Name", 0, true)
+Expected Output: 
+  Player {name: "Name" , totalScore: 0, turn: true}
 
-Test 3: "It will create an instance of an object with 3 key-value pair properties, with parameters for player name and turn."
-Code: let player1 = new Player("Name", true)
-Expected Output: Player {name: "Name" , totalScore: 0, turn: true}
+Test 3: "It will create an instance of an object with 3 key-value pair properties, with parameters for player name and turn (represented by a boolean)."
+Code: 
+  let player1 = new Player("Name", true)
+Expected Output: 
+  Player {name: "Name" , totalScore: 0, turn: true}
+
+Test 4: "It will create an instance of an object with 5 key-value pair properties, with parameters for player name and turn (represented by a boolean)."
+Code: 
+  let player1 = new Player("Name", true)
+Expected Output: 
+  Player {name: "Name" , totalScore: 0, currentRunTotal: 0, turn: true, win: false}
+
 ```
 
 ##### **Describe:** Player.prototype.updateScore()
@@ -128,9 +141,14 @@ Code:
   player1.updateScore(5);
 Expected Output:  5
 
-Test 3: 
+...
+
+Test 3: "It should set the Player object's win flag (which is initially set to false) to true if their totalScore reaches a value of 100 or greater."
 Code:
-Expected Output:  
+  let player1 = new Player("Name", true);
+  player1.updateScore(5);
+  player.win;
+Expected Output: true
 
 ```
 
@@ -146,6 +164,14 @@ Expected Output: true
 ```
 
 ##### **Describe:** Player.prototype.currentPlayer()
+
+```javascript
+Test 1: 
+Code: 
+
+Expected Output: 
+
+```
 
 ##### **Describe:** Player.prototype.isWinner()
 
@@ -165,10 +191,7 @@ Expected Output: true
 
 ##### **Describe:** holdDatTurn()
 
-
-
 ##### **Describe:** diceRoll()
-
 
 ```javascript
 Test 1:"It will return a number passed in as an argument."
@@ -189,11 +212,9 @@ Expected Output: 1 ...
 
 ```
 
-
 ## Known Bugs
 
-* _Any known issues_
-* _should go here_
+* 
 
 ## License
 
