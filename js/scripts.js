@@ -9,6 +9,22 @@ function Player(name, turn) {
   this.win = false;
 }
 
+// returns Player object's name value
+Player.prototype.getPlayerName = function() {
+  return this.name;
+}
+
+// returns Player object's totalScore value
+Player.prototype.getTotalScore = function() {
+  return this.totalScore;
+}
+
+// returns Player object's CurrentRunTotal value
+Player.prototype.getCurrentRunTotal = function() {
+  return this.currentRunTotal;
+}
+
+
 // update scores by pushing number param into the this.totalScore
 // if the player's score hits 100 or above, set win flag to true
 Player.prototype.updateScore = function(number) {
@@ -51,6 +67,7 @@ Player.prototype.holdTurn = function() {
   }
   this.updateScore(this.currentRunTotal);
   this.currentRunTotal = 0;
+<<<<<<< HEAD
 
   // ******* REFACTOR *******
   // for DEBUGGING purposes
@@ -62,6 +79,8 @@ Player.prototype.holdTurn = function() {
     
 
   }
+=======
+>>>>>>> 9fab873834ee95e662bffe1ccf689f1e445a204a
 }
 
 // switchTurn updates Player object's current turn value to true if false, or to false if true
@@ -80,6 +99,7 @@ Player.prototype.switchTurn = function () {
 Player.prototype.resetPlayer = function () {
   this.totalScore = 0;
   this.currentRunTotal = 0;
+  this.win = false;
 }
 
 // BUSINESS LOGIC for game mechanics
@@ -97,48 +117,66 @@ function diceRoll() {
   return random;
 }
 
-// taking both player objects as parameters, reset each player's score values to 0
-function resetPlayers(playerOne, playerTwo) {
-  playerOne.resetPlayer();
-  playerTwo.resetPlayer();
+// taking player array list as parameter, reset each player's score values to 0
+function resetPlayers(playerList) {
+  playerList.forEach(function(player) {
+    player.resetPlayer();
+  })
 }
 
-// taking both player objects as parameters, switch the turn value for each player 
-function switchCurrentPlayer (playerOne, playerTwo) {
-  playerOne.switchTurn();
-  playerTwo.switchTurn();
+// taking player array list as parameter, switch the turn value for each player 
+function switchCurrentPlayer (playerList) {
+  playerList.forEach(function(player) {
+    player.switchTurn();
+  })
 }
 
-// taking both player objects as parameters, checks to see whose turn it currently is, 
+// taking player array list as parameter, checks to see whose turn it currently is, 
 // then rolls the dice for that player
-function rollDatDice (playerOne, playerTwo) {
+function rollDatDice (playerList) {
   let diceRoll = 0;
-  // REFACTOR redundant code
-  if (playerOne.currentPlayer()) {  
-    diceRoll = playerOne.rollTheDice();
-    if (diceRoll === 1) {
-      switchCurrentPlayer(playerOne, playerTwo);
+
+  playerList.forEach(function(player) {
+    if (player.currentPlayer()) {
+      diceRoll = player.rollTheDice();
+      console.log(player.getPlayerName() + " rolled " + diceRoll);
     }
-  } else if (playerTwo.currentPlayer()) {
-    diceRoll = playerTwo.rollTheDice();
-    if (diceRoll === 1) {
-      switchCurrentPlayer(playerOne, playerTwo);
-    }
+  });
+
+  if (diceRoll === 1) {
+    switchCurrentPlayer(playerList);
   }
 
   return diceRoll;
+
 }
 
-// taking both player objects as parameters, checks to see whose turn it currently is,
+// check the win flag for each player, 
+// if a player is declared a winner, 
+// display their name in win banner
+function checkForWinner(playerList) {
+  
+  playerList.forEach(function(player) {
+    if (player.isWinner()) {
+      let winner = player.getPlayerName();
+      displayWinner(winner);
+    }
+  });
+}
+
+// taking player array as parameter, checks to see whose turn it currently is,
 // then updates their score before switching player turns
-function holdDatTurn (playerOne, playerTwo) {
-  if (playerOne.currentPlayer()) {
-    playerOne.holdTurn();
-    switchCurrentPlayer(playerOne, playerTwo);
-  } else if (playerTwo.currentPlayer()) {
-    playerTwo.holdTurn();
-    switchCurrentPlayer(playerOne, playerTwo);
-  }
+function holdDatTurn (playerList) {
+  
+  playerList.forEach(function(player) {
+    if(player.currentPlayer()) {
+      player.holdTurn();
+      switchCurrentPlayer(playerList);
+    }
+  });
+
+  checkForWinner(playerList);
+
 }
 
 // ************
@@ -146,13 +184,18 @@ function holdDatTurn (playerOne, playerTwo) {
 // ************
 
 // -------------
-// REFACTOR: create a single eventListener for all three buttons,
+// REFACTOR: 
+// * create a single eventListener for all three buttons,
 // incorporate branching dependent on which button is clicked
+// * create form for users to input player names, apply user names
+// to each Player name property for display
 // -------------
 function handleEverything() {
 
   const playerOne = new Player("Player One", true);
   const playerTwo = new Player("Player Two", false);
+
+  const players = [playerOne, playerTwo];
 
   const rollButton = document.querySelector("button#roll");
   const holdButton = document.querySelector("button#hold");
@@ -161,7 +204,7 @@ function handleEverything() {
   // hold button handler
   holdButton.addEventListener("click", function() {
     
-    holdDatTurn(playerOne, playerTwo);
+    holdDatTurn(players);
     displayResults(playerOne, playerTwo);
 
   });
@@ -169,8 +212,8 @@ function handleEverything() {
   // roll button handler
   rollButton.addEventListener("click", function () {
     
-    const diceRoll = rollDatDice(playerOne, playerTwo);
-    // displayDiceRoll(diceRoll);
+    const diceRoll = rollDatDice(players);
+    // displayDiceRoll(diceRoll); // create function to display dice roll values real time
     displayResults(playerOne, playerTwo);
 
   });
@@ -178,15 +221,18 @@ function handleEverything() {
   // new button event handler
   newButton.addEventListener("click", function() {
 
-    resetPlayers(playerOne, playerTwo);
+    resetPlayers(players);
     displayResults(playerOne, playerTwo);
+    // hide button and win-banner
     newButton.setAttribute("class", "hidden");
+    document.querySelector("h2#winner-flag").setAttribute("class", "hidden");
 
   })
 
 }
 
 // function for displaying results
+// REFACTOR: create loop for appending each player's scores
 function displayResults(playerOneObject, playerTwoObject) {
 
   const p1Current = document.getElementById("p1-current-run-total");
@@ -202,14 +248,24 @@ function displayResults(playerOneObject, playerTwoObject) {
   p2Current.innerText = null;
   whoWins.innerText = null;
 
-  p1Total.append(playerOneObject.totalScore);
-  p1Current.append(playerOneObject.currentRunTotal);
+  p1Total.append(playerOneObject.getTotalScore()); 
+  p1Current.append(playerOneObject.getCurrentRunTotal());
 
-  p2Total.append(playerTwoObject.totalScore);
-  p2Current.append(playerTwoObject.currentRunTotal);
+  p2Total.append(playerTwoObject.getTotalScore());
+  p2Current.append(playerTwoObject.getCurrentRunTotal());
 
   whoWins.append(playerOneObject.name || playerTwoObject.name );
 
+}
+
+// receiving player name, append name to winner banner,
+// as well as reveal new game button and winner banner
+function displayWinner(winner) {
+  document.querySelector("span#winner-name").innerText = null;
+
+  document.querySelector("button#new").removeAttribute("class");
+  document.querySelector("h2#winner-flag").removeAttribute("class");
+  document.querySelector("span#winner-name").append(winner);
 }
 
 // event listener for window, calls handleEverything function

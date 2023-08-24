@@ -32,6 +32,12 @@
   border-radius: 5px;
   
 }
+#win-banner {
+  color: rgb(190,97,97);
+  display: flex;
+  justify-content: center;
+}
+
 h1 {
   display: flex;
   justify-content: center;
