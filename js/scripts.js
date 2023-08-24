@@ -10,13 +10,15 @@ function Player(name, turn) {
 }
 
 // update scores by pushing number param into the this.totalScore
+// if the player's score hits 100 or above, set win flag to true
 Player.prototype.updateScore = function(number) {
   this.totalScore += number;
-  if  (this.totalScore >= 30) { // DEBUGGING: change 30 to 100
+  if  (this.totalScore >= 100) { 
       this.win = true;
   }
 }
 
+// returns Player object's win value, initially set to false
 Player.prototype.isWinner = function () {
   return this.win
 }
@@ -50,7 +52,7 @@ Player.prototype.holdTurn = function() {
   this.updateScore(this.currentRunTotal);
   this.currentRunTotal = 0;
 
-  // REFACTOR
+  // ******* REFACTOR *******
   // for DEBUGGING purposes
   // UI LOGIC for WINNER CONDITION
   if (this.isWinner() === true) {
