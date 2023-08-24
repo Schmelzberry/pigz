@@ -9,11 +9,16 @@ function Player(name, turn) {
   this.win = false;
 }
 
+// returns Player object's name value
+Player.prototype.getPlayerName = function() {
+  return this.name;
+}
+
 // update scores by pushing number param into the this.totalScore
 // if the player's score hits 100 or above, set win flag to true
 Player.prototype.updateScore = function(number) {
   this.totalScore += number;
-  if  (this.totalScore >= 100) { 
+  if  (this.totalScore >= 10) { 
       this.win = true;
   }
 }
@@ -51,17 +56,6 @@ Player.prototype.holdTurn = function() {
   }
   this.updateScore(this.currentRunTotal);
   this.currentRunTotal = 0;
-
-  // ******* REFACTOR *******
-  // for DEBUGGING purposes
-  // UI LOGIC for WINNER CONDITION
-  if (this.isWinner() === true) {
-    document.querySelector("button#new").removeAttribute("class");
-    let winner = this.name;
-    return window.alert(winner + " wins!")
-    
-
-  }
 }
 
 // switchTurn updates Player object's current turn value to true if false, or to false if true
@@ -80,6 +74,7 @@ Player.prototype.switchTurn = function () {
 Player.prototype.resetPlayer = function () {
   this.totalScore = 0;
   this.currentRunTotal = 0;
+  this.win = false;
 }
 
 // BUSINESS LOGIC for game mechanics
@@ -127,6 +122,21 @@ function rollDatDice (playerOne, playerTwo) {
   }
 
   return diceRoll;
+
+}
+
+// check the win flag for each player, 
+// if one player is declared a winner, 
+// return that player's name
+// otherwise return null
+function ifPlayerWins(playerOne, playerTwo) {
+  if (playerOne.isWinner()) {
+    let winner = playerOne.getPlayerName();
+    displayWinner(winner);
+  } else if (playerTwo.isWinner()) {
+    let winner = playerTwo.getPlayerName();
+    displayWinner(winner);
+  }
 }
 
 // taking both player objects as parameters, checks to see whose turn it currently is,
@@ -139,6 +149,9 @@ function holdDatTurn (playerOne, playerTwo) {
     playerTwo.holdTurn();
     switchCurrentPlayer(playerOne, playerTwo);
   }
+
+  ifPlayerWins(playerOne, playerTwo);
+
 }
 
 // ************
@@ -146,8 +159,11 @@ function holdDatTurn (playerOne, playerTwo) {
 // ************
 
 // -------------
-// REFACTOR: create a single eventListener for all three buttons,
+// REFACTOR: 
+// * create a single eventListener for all three buttons,
 // incorporate branching dependent on which button is clicked
+// * create form for users to input player names, apply user names
+// to each Player name property for display
 // -------------
 function handleEverything() {
 
@@ -170,7 +186,7 @@ function handleEverything() {
   rollButton.addEventListener("click", function () {
     
     const diceRoll = rollDatDice(playerOne, playerTwo);
-    // displayDiceRoll(diceRoll);
+    // displayDiceRoll(diceRoll); // create function to display dice roll values real time
     displayResults(playerOne, playerTwo);
 
   });
@@ -180,7 +196,9 @@ function handleEverything() {
 
     resetPlayers(playerOne, playerTwo);
     displayResults(playerOne, playerTwo);
+    // hide button and win-banner
     newButton.setAttribute("class", "hidden");
+    document.querySelector("h2#winner-flag").setAttribute("class", "hidden");
 
   })
 
@@ -200,12 +218,22 @@ function displayResults(playerOneObject, playerTwoObject) {
   p2Total.innerText = null;
   p2Current.innerText = null;
 
-  p1Total.append(playerOneObject.totalScore);
+  p1Total.append(playerOneObject.totalScore); // **** CREATE PROTOTYPE METHODS
   p1Current.append(playerOneObject.currentRunTotal);
 
   p2Total.append(playerTwoObject.totalScore);
   p2Current.append(playerTwoObject.currentRunTotal);
 
+}
+
+// receiving player name, append name to winner banner,
+// as well as reveal new game button and winner banner
+function displayWinner(winner) {
+  document.querySelector("span#winner-name").innerText = null;
+
+  document.querySelector("button#new").removeAttribute("class");
+  document.querySelector("h2#winner-flag").removeAttribute("class");
+  document.querySelector("span#winner-name").append(winner);
 }
 
 // event listener for window, calls handleEverything function
