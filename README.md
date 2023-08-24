@@ -103,14 +103,6 @@ Expected Output: true
 
 ##### **Describe:** Player.prototype.currentPlayer()
 
-```javascript
-Test 1: 
-Code: 
-
-Expected Output: 
-
-```
-
 ##### **Describe:** Player.prototype.isWinner()
 
 ##### **Describe:** Player.prototype.rollTheDice()
@@ -120,6 +112,14 @@ Expected Output:
 ##### **Describe:** Player.prototype.switchTurn()
 
 ##### **Describe:** Player.prototype.resetPlayer()
+
+##### **Describe:** Player.prototype.getPlayerName()
+
+##### **Describe:** Player.prototype.getTotalScore()
+
+##### **Describe:** Player.prototype.getCurrentRunTotal()
+
+##### **Describe:** checkForWinner()
 
 ##### **Describe:** resetPlayers()
 
@@ -154,6 +154,7 @@ Expected Output: 1 ...
 
 * Players can continue playing the game, even after the game has been won.
 * Elements on the DOM adjust their position if the size of text changes.
+* The value of the current dice roll is not displayed.
 
 ## License
 
