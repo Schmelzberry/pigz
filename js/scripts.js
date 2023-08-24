@@ -89,16 +89,15 @@ Player.prototype.resetPlayer = function () {
 // to replace each function that runs our game mechanics
 // -------------
 
-// create a random number between 1-6
+// create and return a random number between 1-6
 function diceRoll() {
   min = Math.ceil(1);
   max = Math.floor(6);
   let random = Math.floor(Math.random() * (max - min + 1) + min)
-  console.log(random);
   return random;
 }
 
-// taking both player objects as parameters, reset each player score values to 0
+// taking both player objects as parameters, reset each player's score values to 0
 function resetPlayers(playerOne, playerTwo) {
   playerOne.resetPlayer();
   playerTwo.resetPlayer();
@@ -145,6 +144,11 @@ function holdDatTurn (playerOne, playerTwo) {
 // ************
 // * UI LOGIC *
 // ************
+
+// -------------
+// REFACTOR: create a single eventListener for all three buttons,
+// incorporate branching dependent on which button is clicked
+// -------------
 function handleEverything() {
 
   const playerOne = new Player("Player One", true);
