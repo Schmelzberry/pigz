@@ -3,10 +3,5 @@
 }
 
 body {
-  background-color: #e5e5f7;
-opacity: 0.1;
-background-image:  linear-gradient(135deg, #9094e8 25%, transparent 25%), linear-gradient(225deg, #9094e8 25%, transparent 25%), linear-gradient(45deg, #9094e8 25%, transparent 25%), linear-gradient(315deg, #9094e8 25%, #e5e5f7 25%);
-background-position:  13px 0, 13px 0, 0 0, 0 0;
-background-size: 26px 26px;
-background-repeat: repeat;
+
 }

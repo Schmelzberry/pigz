@@ -6,11 +6,19 @@ function Player(name, turn) {
   this.totalScore = 0;
   this.currentRunTotal = 0;
   this.turn = turn;
+  this.win = false;
 }
 
 // update scores by pushing number param into the this.totalScore
 Player.prototype.updateScore = function(number) {
   this.totalScore += number;
+  if  (this.totalScore >= 30) { // DEBUGGING: change 30 to 100
+      this.win = true;
+  }
+}
+
+Player.prototype.isWinner = function () {
+  return this.win
 }
 
 // check boolean value of turn to see who the current player is
@@ -23,14 +31,15 @@ Player.prototype.rollTheDice = function () {
   if (!this.turn) {
     return false
   }
+
   let diceRolled = diceRoll();
 
   if (diceRolled !== 1 ) {
-    his.currentRunTotal += diceRolled;
+    this.currentRunTotal += diceRolled;
   } else {
     this.currentRunTotal = 0;
   }
-  
+  return diceRolled;
 } 
 
 // holdTurn updates player total score with player's current run total
@@ -38,8 +47,19 @@ Player.prototype.holdTurn = function() {
   if (!this.turn) {
     return false;
   }
-  this.totalScore += this.currentRunTotal;
+  this.updateScore(this.currentRunTotal);
   this.currentRunTotal = 0;
+
+  // REFACTOR
+  // for DEBUGGING purposes
+  // UI LOGIC for WINNER CONDITION
+  if (this.isWinner() === true) {
+    document.querySelector("button#new").removeAttribute("class");
+    let winner = this.name;
+    return window.alert(winner + " wins!")
+    
+
+  }
 }
 
 // switchTurn updates Player object's current turn value to true if false, or to false if true
@@ -91,11 +111,21 @@ function switchCurrentPlayer (playerOne, playerTwo) {
 // taking both player objects as parameters, checks to see whose turn it currently is, 
 // then rolls the dice for that player
 function rollDatDice (playerOne, playerTwo) {
+  let diceRoll = 0;
+  // REFACTOR redundant code
   if (playerOne.currentPlayer()) {  
-      playerOne.rollTheDice();
-    } else if (playerTwo.currentPlayer()) {
-      playerTwo.rollTheDice();
+    diceRoll = playerOne.rollTheDice();
+    if (diceRoll === 1) {
+      switchCurrentPlayer(playerOne, playerTwo);
     }
+  } else if (playerTwo.currentPlayer()) {
+    diceRoll = playerTwo.rollTheDice();
+    if (diceRoll === 1) {
+      switchCurrentPlayer(playerOne, playerTwo);
+    }
+  }
+
+  return diceRoll;
 }
 
 // taking both player objects as parameters, checks to see whose turn it currently is,
@@ -115,14 +145,14 @@ function holdDatTurn (playerOne, playerTwo) {
 // ************
 function handleEverything() {
 
-  const playerOne = new Player("One", true);
-  const playerTwo = new Player("Two", false);
+  const playerOne = new Player("Player One", true);
+  const playerTwo = new Player("Player Two", false);
 
   const rollButton = document.querySelector("button#roll");
   const holdButton = document.querySelector("button#hold");
   const newButton = document.querySelector("button#new");
 
-  // hold button handler -- possible refactor to loop???
+  // hold button handler
   holdButton.addEventListener("click", function() {
     
     holdDatTurn(playerOne, playerTwo);
@@ -133,7 +163,8 @@ function handleEverything() {
   // roll button handler
   rollButton.addEventListener("click", function () {
     
-    rollDatDice(playerOne, playerTwo);
+    const diceRoll = rollDatDice(playerOne, playerTwo);
+    // displayDiceRoll(diceRoll);
     displayResults(playerOne, playerTwo);
 
   });
@@ -142,14 +173,12 @@ function handleEverything() {
   newButton.addEventListener("click", function() {
 
     resetPlayers(playerOne, playerTwo);
+    displayResults(playerOne, playerTwo);
     newButton.setAttribute("class", "hidden");
 
   })
 
 }
-
-// event listener for window, calls handleEverything function
-window.addEventListener("load", handleEverything);
 
 // function for displaying results
 function displayResults(playerOneObject, playerTwoObject) {
@@ -172,3 +201,6 @@ function displayResults(playerOneObject, playerTwoObject) {
   p2Current.append(playerTwoObject.currentRunTotal);
 
 }
+
+// event listener for window, calls handleEverything function
+window.addEventListener("load", handleEverything);
