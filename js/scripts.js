@@ -93,64 +93,62 @@ function diceRoll() {
 }
 
 // taking both player objects as parameters, reset each player's score values to 0
-function resetPlayers(playerOne, playerTwo) {
-  playerOne.resetPlayer();
-  playerTwo.resetPlayer();
+function resetPlayers(playerList) {
+  playerList.forEach(function(player) {
+    player.resetPlayer();
+  })
 }
 
 // taking both player objects as parameters, switch the turn value for each player 
-function switchCurrentPlayer (playerOne, playerTwo) {
-  playerOne.switchTurn();
-  playerTwo.switchTurn();
+function switchCurrentPlayer (playerList) {
+  playerList.forEach(function(player) {
+    player.switchTurn();
+  })
 }
 
 // taking both player objects as parameters, checks to see whose turn it currently is, 
 // then rolls the dice for that player
-function rollDatDice (playerOne, playerTwo) {
+function rollDatDice (playerList) {
   let diceRoll = 0;
-  // REFACTOR redundant code
-  if (playerOne.currentPlayer()) {  
-    diceRoll = playerOne.rollTheDice();
-    if (diceRoll === 1) {
-      switchCurrentPlayer(playerOne, playerTwo);
+
+  playerList.forEach(function(player) {
+    if (player.currentPlayer()) {
+      diceRoll = player.rollTheDice();
+      if (diceRoll === 1) {
+        switchCurrentPlayer(playerList);
+      }
     }
-  } else if (playerTwo.currentPlayer()) {
-    diceRoll = playerTwo.rollTheDice();
-    if (diceRoll === 1) {
-      switchCurrentPlayer(playerOne, playerTwo);
-    }
-  }
+  });
 
   return diceRoll;
 
 }
 
 // check the win flag for each player, 
-// if one player is declared a winner, 
-// return that player's name
-// otherwise return null
-function ifPlayerWins(playerOne, playerTwo) {
-  if (playerOne.isWinner()) {
-    let winner = playerOne.getPlayerName();
-    displayWinner(winner);
-  } else if (playerTwo.isWinner()) {
-    let winner = playerTwo.getPlayerName();
-    displayWinner(winner);
-  }
+// if a player is declared a winner, 
+// display their name in win banner
+function checkForWinner(playerList) {
+  
+  playerList.forEach(function(player) {
+    if (player.isWinner()) {
+      let winner = player.getPlayerName();
+      displayWinner(winner);
+    }
+  });
 }
 
 // taking both player objects as parameters, checks to see whose turn it currently is,
 // then updates their score before switching player turns
-function holdDatTurn (playerOne, playerTwo) {
-  if (playerOne.currentPlayer()) {
-    playerOne.holdTurn();
-    switchCurrentPlayer(playerOne, playerTwo);
-  } else if (playerTwo.currentPlayer()) {
-    playerTwo.holdTurn();
-    switchCurrentPlayer(playerOne, playerTwo);
-  }
+function holdDatTurn (playerList) {
+  
+  playerList.forEach(function(player) {
+    if(player.currentPlayer()) {
+      player.holdTurn();
+      switchCurrentPlayer(playerList);
+    }
+  });
 
-  ifPlayerWins(playerOne, playerTwo);
+  checkForWinner(playerList);
 
 }
 
@@ -170,6 +168,8 @@ function handleEverything() {
   const playerOne = new Player("Player One", true);
   const playerTwo = new Player("Player Two", false);
 
+  const players = [playerOne, playerTwo];
+
   const rollButton = document.querySelector("button#roll");
   const holdButton = document.querySelector("button#hold");
   const newButton = document.querySelector("button#new");
@@ -177,7 +177,7 @@ function handleEverything() {
   // hold button handler
   holdButton.addEventListener("click", function() {
     
-    holdDatTurn(playerOne, playerTwo);
+    holdDatTurn(players);
     displayResults(playerOne, playerTwo);
 
   });
@@ -185,7 +185,7 @@ function handleEverything() {
   // roll button handler
   rollButton.addEventListener("click", function () {
     
-    const diceRoll = rollDatDice(playerOne, playerTwo);
+    const diceRoll = rollDatDice(players);
     // displayDiceRoll(diceRoll); // create function to display dice roll values real time
     displayResults(playerOne, playerTwo);
 
@@ -194,7 +194,7 @@ function handleEverything() {
   // new button event handler
   newButton.addEventListener("click", function() {
 
-    resetPlayers(playerOne, playerTwo);
+    resetPlayers(players);
     displayResults(playerOne, playerTwo);
     // hide button and win-banner
     newButton.setAttribute("class", "hidden");
