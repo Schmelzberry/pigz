@@ -152,7 +152,8 @@ Expected Output: 1 ...
 
 ## Known Bugs
 
-* 
+* Players can continue playing the game, even after the game has been won.
+* Elements on the DOM adjust their position if the size of text changes.
 
 ## License
 

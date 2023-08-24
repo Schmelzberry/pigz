@@ -14,11 +14,22 @@ Player.prototype.getPlayerName = function() {
   return this.name;
 }
 
+// returns Player object's totalScore value
+Player.prototype.getTotalScore = function() {
+  return this.totalScore;
+}
+
+// returns Player object's CurrentRunTotal value
+Player.prototype.getCurrentRunTotal = function() {
+  return this.currentRunTotal;
+}
+
+
 // update scores by pushing number param into the this.totalScore
 // if the player's score hits 100 or above, set win flag to true
 Player.prototype.updateScore = function(number) {
   this.totalScore += number;
-  if  (this.totalScore >= 10) { 
+  if  (this.totalScore >= 100) { 
       this.win = true;
   }
 }
@@ -92,21 +103,21 @@ function diceRoll() {
   return random;
 }
 
-// taking both player objects as parameters, reset each player's score values to 0
+// taking player array list as parameter, reset each player's score values to 0
 function resetPlayers(playerList) {
   playerList.forEach(function(player) {
     player.resetPlayer();
   })
 }
 
-// taking both player objects as parameters, switch the turn value for each player 
+// taking player array list as parameter, switch the turn value for each player 
 function switchCurrentPlayer (playerList) {
   playerList.forEach(function(player) {
     player.switchTurn();
   })
 }
 
-// taking both player objects as parameters, checks to see whose turn it currently is, 
+// taking player array list as parameter, checks to see whose turn it currently is, 
 // then rolls the dice for that player
 function rollDatDice (playerList) {
   let diceRoll = 0;
@@ -114,11 +125,13 @@ function rollDatDice (playerList) {
   playerList.forEach(function(player) {
     if (player.currentPlayer()) {
       diceRoll = player.rollTheDice();
-      if (diceRoll === 1) {
-        switchCurrentPlayer(playerList);
-      }
+      console.log(player.getPlayerName() + " rolled " + diceRoll);
     }
   });
+
+  if (diceRoll === 1) {
+    switchCurrentPlayer(playerList);
+  }
 
   return diceRoll;
 
@@ -137,7 +150,7 @@ function checkForWinner(playerList) {
   });
 }
 
-// taking both player objects as parameters, checks to see whose turn it currently is,
+// taking player array as parameter, checks to see whose turn it currently is,
 // then updates their score before switching player turns
 function holdDatTurn (playerList) {
   
@@ -205,6 +218,7 @@ function handleEverything() {
 }
 
 // function for displaying results
+// REFACTOR: create loop for appending each player's scores
 function displayResults(playerOneObject, playerTwoObject) {
 
   const p1Current = document.getElementById("p1-current-run-total");
@@ -218,11 +232,11 @@ function displayResults(playerOneObject, playerTwoObject) {
   p2Total.innerText = null;
   p2Current.innerText = null;
 
-  p1Total.append(playerOneObject.totalScore); // **** CREATE PROTOTYPE METHODS
-  p1Current.append(playerOneObject.currentRunTotal);
+  p1Total.append(playerOneObject.getTotalScore()); 
+  p1Current.append(playerOneObject.getCurrentRunTotal());
 
-  p2Total.append(playerTwoObject.totalScore);
-  p2Current.append(playerTwoObject.currentRunTotal);
+  p2Total.append(playerTwoObject.getTotalScore());
+  p2Current.append(playerTwoObject.getCurrentRunTotal());
 
 }
 
