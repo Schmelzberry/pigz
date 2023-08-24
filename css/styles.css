@@ -16,16 +16,49 @@
 #buttonz {
   display: flex;
   justify-content: space-evenly;
+}
+#new {
+  background-color: rgb(235, 178, 178);
+  border-radius: 5px;
+  
+}
+#roll {
+  background-color: rgb(235, 178, 178);
+  border-radius: 5px;
+}
+
+#hold {
+  background-color: rgb(235, 178, 178);
+  border-radius: 5px;
   
 }
 h1 {
+  color: rgb(190,97,97);
   display: flex;
   justify-content: center;
 }
 body {
-  background-image: linear-gradient(112.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(168,98,98) 60%, rgb(168,98,98) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(157.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(168,98,98) 60%, rgb(168,98,98) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(135deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(168,98,98) 60%, rgb(168,98,98) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(90deg, rgb(195, 195, 195),rgb(228, 228, 228)); background-blend-mode:overlay,overlay,overlay,normal;
+  background-image: linear-gradient(112.5deg, rgb(190,97,97) 0%, rgb(190,97,97) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(157.5deg, rgb(190,97,97) 0%, rgb(190,97,97) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(135deg, rgb(190,97,97) 0%, rgb(190,97,97) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(90deg, rgb(195, 195, 195),rgb(227,139,139)); background-blend-mode:overlay,overlay,overlay,normal;
   background-attachment: fixed;
   background-repeat: no-repeat;
 }
 
+.player-two h2{
+  color: rgb(129, 66, 66);
+  text-decoration: underline;
+}
 
+.player-two h3{
+  color: rgb(129, 66, 66);
+  text-decoration: bold;
+}
+
+.player-one h2{
+  color: rgb(190,97,97);
+  text-decoration: underline;
+}
+
+.player-one h3{
+  color: rgb(190,97,97);
+  text-decoration: bold;
+}
